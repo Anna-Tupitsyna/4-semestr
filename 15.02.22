@@ -1,0 +1,1191 @@
+interface Door
+{
+    public function getWidth(): float;
+    public function getHeight(): float;
+}
+
+class WoodenDoor implements Door
+{
+    protected $width;
+    protected $height;
+
+    public function __construct(float $width, float $height)
+    {
+        $this->width = $width;
+        $this->height = $height;
+    }
+
+    public function getWidth(): float
+    {
+        return $this->width;
+    }
+
+    public function getHeight(): float
+    {
+        return $this->height;
+    }
+}
+class DoorFactory
+{
+    public static function makeDoor($width, $height): Door
+    {
+        return new WoodenDoor($width, $height);
+    }
+}
+Фабричный метод:
+interface Interviewer
+{
+    public function askQuestions();
+}
+
+class Developer implements Interviewer
+{
+    public function askQuestions()
+    {
+        echo 'Спрашивает про шаблоны проектирования!';
+    }
+}
+
+class CommunityExecutive implements Interviewer
+{
+    public function askQuestions()
+    {
+        echo 'Спрашивает о работе с сообществом';
+    }
+}
+Абстрактная фабрика:
+interface DoorFactory
+{
+    public function makeDoor(): Door;
+    public function makeFittingExpert(): DoorFittingExpert;
+}
+
+// Деревянная фабрика вернет деревянную дверь и столяра
+class WoodenDoorFactory implements DoorFactory
+{
+    public function makeDoor(): Door
+    {
+        return new WoodenDoor();
+    }
+
+    public function makeFittingExpert(): DoorFittingExpert
+    {
+        return new Carpenter();
+    }
+}
+
+// Железная фабрика вернет железную дверь и сварщика
+class IronDoorFactory implements DoorFactory
+{
+    public function makeDoor(): Door
+    {
+        return new IronDoor();
+    }
+
+    public function makeFittingExpert(): DoorFittingExpert
+    {
+        return new Welder();
+    }
+}
+Строитель:
+class Burger
+{
+    protected $size;
+
+    protected $cheese = false;
+    protected $pepperoni = false;
+    protected $lettuce = false;
+    protected $tomato = false;
+
+    public function __construct(BurgerBuilder $builder)
+    {
+        $this->size = $builder->size;
+        $this->cheese = $builder->cheese;
+        $this->pepperoni = $builder->pepperoni;
+        $this->lettuce = $builder->lettuce;
+        $this->tomato = $builder->tomato;
+    }
+}
+class BurgerBuilder
+{
+    public $size;
+
+    public $cheese = false;
+    public $pepperoni = false;
+    public $lettuce = false;
+    public $tomato = false;
+
+    public function __construct(int $size)
+    {
+        $this->size = $size;
+    }
+
+    public function addPepperoni()
+    {
+        $this->pepperoni = true;
+        return $this;
+    }
+
+    public function addLettuce()
+    {
+        $this->lettuce = true;
+        return $this;
+    }
+
+    public function addCheese()
+    {
+        $this->cheese = true;
+        return $this;
+    }
+
+    public function addTomato()
+    {
+        $this->tomato = true;
+        return $this;
+    }
+
+    public function build(): Burger
+    {
+        return new Burger($this);
+    }
+}
+Прототип:
+class Sheep
+{
+    protected $name;
+    protected $category;
+
+    public function __construct(string $name, string $category = 'Горная овечка')
+    {
+        $this->name = $name;
+        $this->category = $category;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setCategory(string $category)
+    {
+        $this->category = $category;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+}
+Одиночка:
+final class President
+{
+    private static $instance;
+
+    private function __construct()
+    {
+        // Прячем конструктор
+    }
+
+    public static function getInstance(): President
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    private function __clone()
+    {
+        // Отключаем клонирование
+    }
+
+    private function __wakeup()
+    {
+        // Отключаем десериализацию
+    }
+}
+Адаптер:
+interface Lion
+{
+    public function roar();
+}
+
+class AfricanLion implements Lion
+{
+    public function roar()
+    {
+    }
+}
+
+class AsianLion implements Lion
+{
+    public function roar()
+    {
+    }
+}
+class Hunter
+{
+    public function hunt(Lion $lion)
+    {
+    }
+}
+class WildDog
+{
+    public function bark()
+    {
+    }
+}
+
+// Адаптер вокруг собаки сделает её совместимой с охотником
+class WildDogAdapter implements Lion
+{
+    protected $dog;
+
+    public function __construct(WildDog $dog)
+    {
+        $this->dog = $dog;
+    }
+
+    public function roar()
+    {
+        $this->dog->bark();
+    }
+}
+Мост:
+interface WebPage
+{
+    public function __construct(Theme $theme);
+    public function getContent();
+}
+
+class About implements WebPage
+{
+    protected $theme;
+
+    public function __construct(Theme $theme)
+    {
+        $this->theme = $theme;
+    }
+
+    public function getContent()
+    {
+        return "About page in " . $this->theme->getColor();
+    }
+}
+
+class Careers implements WebPage
+{
+    protected $theme;
+
+    public function __construct(Theme $theme)
+    {
+        $this->theme = $theme;
+    }
+
+    public function getContent()
+    {
+        return "Careers page in " . $this->theme->getColor();
+    }
+}
+interface Theme
+{
+    public function getColor();
+}
+
+class DarkTheme implements Theme
+{
+    public function getColor()
+    {
+        return 'Dark Black';
+    }
+}
+class LightTheme implements Theme
+{
+    public function getColor()
+    {
+        return 'Off white';
+    }
+}
+class AquaTheme implements Theme
+{
+    public function getColor()
+    {
+        return 'Light blue';
+    }
+}
+Компоновщик:
+interface Employee
+{
+    public function __construct(string $name, float $salary);
+    public function getName(): string;
+    public function setSalary(float $salary);
+    public function getSalary(): float;
+    public function getRoles(): array;
+}
+
+class Developer implements Employee
+{
+    protected $salary;
+    protected $name;
+
+    public function __construct(string $name, float $salary)
+    {
+        $this->name = $name;
+        $this->salary = $salary;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setSalary(float $salary)
+    {
+        $this->salary = $salary;
+    }
+
+    public function getSalary(): float
+    {
+        return $this->salary;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+}
+
+class Designer implements Employee
+{
+    protected $salary;
+    protected $name;
+
+    public function __construct(string $name, float $salary)
+    {
+        $this->name = $name;
+        $this->salary = $salary;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setSalary(float $salary)
+    {
+        $this->salary = $salary;
+    }
+
+    public function getSalary(): float
+    {
+        return $this->salary;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+}
+class Organization
+{
+    protected $employees;
+
+    public function addEmployee(Employee $employee)
+    {
+        $this->employees[] = $employee;
+    }
+
+    public function getNetSalaries(): float
+    {
+        $netSalary = 0;
+
+        foreach ($this->employees as $employee) {
+            $netSalary += $employee->getSalary();
+        }
+
+        return $netSalary;
+    }
+}
+Декоратор:
+interface Coffee
+{
+    public function getCost();
+    public function getDescription();
+}
+
+class SimpleCoffee implements Coffee
+{
+    public function getCost()
+    {
+        return 10;
+    }
+
+    public function getDescription()
+    {
+        return 'Simple coffee';
+    }
+}
+class MilkCoffee implements Coffee
+{
+    protected $coffee;
+
+    public function __construct(Coffee $coffee)
+    {
+        $this->coffee = $coffee;
+    }
+
+    public function getCost()
+    {
+        return $this->coffee->getCost() + 2;
+    }
+
+    public function getDescription()
+    {
+        return $this->coffee->getDescription() . ', milk';
+    }
+}
+
+class WhipCoffee implements Coffee
+{
+    protected $coffee;
+
+    public function __construct(Coffee $coffee)
+    {
+        $this->coffee = $coffee;
+    }
+
+    public function getCost()
+    {
+        return $this->coffee->getCost() + 5;
+    }
+
+    public function getDescription()
+    {
+        return $this->coffee->getDescription() . ', whip';
+    }
+}
+
+class VanillaCoffee implements Coffee
+{
+    protected $coffee;
+
+    public function __construct(Coffee $coffee)
+    {
+        $this->coffee = $coffee;
+    }
+
+    public function getCost()
+    {
+        return $this->coffee->getCost() + 3;
+    }
+
+    public function getDescription()
+    {
+        return $this->coffee->getDescription() . ', vanilla';
+    }
+}
+Фасад:
+class Computer
+{
+    public function getElectricShock()
+    {
+        echo "Ouch!";
+    }
+
+    public function makeSound()
+    {
+        echo "Beep beep!";
+    }
+
+    public function showLoadingScreen()
+    {
+        echo "Loading..";
+    }
+
+    public function bam()
+    {
+        echo "Ready to be used!";
+    }
+
+    public function closeEverything()
+    {
+        echo "Bup bup bup buzzzz!";
+    }
+
+    public function sooth()
+    {
+        echo "Zzzzz";
+    }
+
+    public function pullCurrent()
+    {
+        echo "Haaah!";
+    }
+}
+class ComputerFacade
+{
+    protected $computer;
+
+    public function __construct(Computer $computer)
+    {
+        $this->computer = $computer;
+    }
+
+    public function turnOn()
+    {
+        $this->computer->getElectricShock();
+        $this->computer->makeSound();
+        $this->computer->showLoadingScreen();
+        $this->computer->bam();
+    }
+
+    public function turnOff()
+    {
+        $this->computer->closeEverything();
+        $this->computer->pullCurrent();
+        $this->computer->sooth();
+    }
+}
+Приспособленец:
+class KarakTea
+{
+}
+
+// Действует как фабрика и экономит чай
+class TeaMaker
+{
+    protected $availableTea = [];
+
+    public function make($preference)
+    {
+        if (empty($this->availableTea[$preference])) {
+            $this->availableTea[$preference] = new KarakTea();
+        }
+
+        return $this->availableTea[$preference];
+    }
+}
+class TeaShop
+{
+    protected $orders;
+    protected $teaMaker;
+
+    public function __construct(TeaMaker $teaMaker)
+    {
+        $this->teaMaker = $teaMaker;
+    }
+
+    public function takeOrder(string $teaType, int $table)
+    {
+        $this->orders[$table] = $this->teaMaker->make($teaType);
+    }
+
+    public function serve()
+    {
+        foreach ($this->orders as $table => $tea) {
+            echo "Serving tea to table# " . $table;
+        }
+    }
+}
+Заместитель:
+interface Door
+{
+    public function open();
+    public function close();
+}
+
+class LabDoor implements Door
+{
+    public function open()
+    {
+        echo "Opening lab door";
+    }
+
+    public function close()
+    {
+        echo "Closing the lab door";
+    }
+}
+class Security
+{
+    protected $door;
+
+    public function __construct(Door $door)
+    {
+        $this->door = $door;
+    }
+
+    public function open($password)
+    {
+        if ($this->authenticate($password)) {
+            $this->door->open();
+        } else {
+            echo "Big no! It ain't possible.";
+        }
+    }
+
+    public function authenticate($password)
+    {
+        return $password === '$ecr@t';
+    }
+
+    public function close()
+    {
+        $this->door->close();
+    }
+}
+Цепочка ответственности:
+abstract class Account
+{
+    protected $successor;
+    protected $balance;
+
+    public function setNext(Account $account)
+    {
+        $this->successor = $account;
+    }
+
+    public function pay(float $amountToPay)
+    {
+        if ($this->canPay($amountToPay)) {
+            echo sprintf('Paid %s using %s' . PHP_EOL, $amountToPay, get_called_class());
+        } elseif ($this->successor) {
+            echo sprintf('Cannot pay using %s. Proceeding ..' . PHP_EOL, get_called_class());
+            $this->successor->pay($amountToPay);
+        } else {
+            throw new Exception('None of the accounts have enough balance');
+        }
+    }
+
+    public function canPay($amount): bool
+    {
+        return $this->balance >= $amount;
+    }
+}
+
+class Bank extends Account
+{
+    protected $balance;
+
+    public function __construct(float $balance)
+    {
+        $this->balance = $balance;
+    }
+}
+
+class Paypal extends Account
+{
+    protected $balance;
+
+    public function __construct(float $balance)
+    {
+        $this->balance = $balance;
+    }
+}
+
+class Bitcoin extends Account
+{
+    protected $balance;
+
+    public function __construct(float $balance)
+    {
+        $this->balance = $balance;
+    }
+}
+Команда:
+class Bulb
+{
+    public function turnOn()
+    {
+        echo "Bulb has been lit";
+    }
+
+    public function turnOff()
+    {
+        echo "Darkness!";
+    }
+}
+interface Command
+{
+    public function execute();
+    public function undo();
+    public function redo();
+}
+
+// Command
+class TurnOn implements Command
+{
+    protected $bulb;
+
+    public function __construct(Bulb $bulb)
+    {
+        $this->bulb = $bulb;
+    }
+
+    public function execute()
+    {
+        $this->bulb->turnOn();
+    }
+
+    public function undo()
+    {
+        $this->bulb->turnOff();
+    }
+
+    public function redo()
+    {
+        $this->execute();
+    }
+}
+
+class TurnOff implements Command
+{
+    protected $bulb;
+
+    public function __construct(Bulb $bulb)
+    {
+        $this->bulb = $bulb;
+    }
+
+    public function execute()
+    {
+        $this->bulb->turnOff();
+    }
+
+    public function undo()
+    {
+        $this->bulb->turnOn();
+    }
+
+    public function redo()
+    {
+        $this->execute();
+    }
+}
+class RemoteControl
+{
+    public function submit(Command $command)
+    {
+        $command->execute();
+    }
+}
+Итератор:
+class RadioStation
+{
+    protected $frequency;
+
+    public function __construct(float $frequency)
+    {
+        $this->frequency = $frequency;
+    }
+
+    public function getFrequency(): float
+    {
+        return $this->frequency;
+    }
+}
+use Countable;
+use Iterator;
+
+class StationList implements Countable, Iterator
+{
+    /** @var RadioStation[] $stations */
+    protected $stations = [];
+
+    /** @var int $counter */
+    protected $counter;
+
+    public function addStation(RadioStation $station)
+    {
+        $this->stations[] = $station;
+    }
+
+    public function removeStation(RadioStation $toRemove)
+    {
+        $toRemoveFrequency = $toRemove->getFrequency();
+        $this->stations = array_filter($this->stations, function (RadioStation $station) use ($toRemoveFrequency) {
+            return $station->getFrequency() !== $toRemoveFrequency;
+        });
+    }
+
+    public function count(): int
+    {
+        return count($this->stations);
+    }
+
+    public function current(): RadioStation
+    {
+        return $this->stations[$this->counter];
+    }
+
+    public function key()
+    {
+        return $this->counter;
+    }
+
+    public function next()
+    {
+        $this->counter++;
+    }
+
+    public function rewind()
+    {
+        $this->counter = 0;
+    }
+
+    public function valid(): bool
+    {
+        return isset($this->stations[$this->counter]);
+    }
+}
+Посредник:
+interface ChatRoomMediator 
+{
+    public function showMessage(User $user, string $message);
+}
+
+// Посредник
+class ChatRoom implements ChatRoomMediator
+{
+    public function showMessage(User $user, string $message)
+    {
+        $time = date('M d, y H:i');
+        $sender = $user->getName();
+
+        echo $time . '[' . $sender . ']:' . $message;
+    }
+}
+class User {
+    protected $name;
+    protected $chatMediator;
+
+    public function __construct(string $name, ChatRoomMediator $chatMediator) {
+        $this->name = $name;
+        $this->chatMediator = $chatMediator;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function send($message) {
+        $this->chatMediator->showMessage($this, $message);
+    }
+}
+Хранитель:
+class EditorMemento
+{
+    protected $content;
+
+    public function __construct(string $content)
+    {
+        $this->content = $content;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+}
+class Editor
+{
+    protected $content = '';
+
+    public function type(string $words)
+    {
+        $this->content = $this->content . ' ' . $words;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function save()
+    {
+        return new EditorMemento($this->content);
+    }
+
+    public function restore(EditorMemento $memento)
+    {
+        $this->content = $memento->getContent();
+    }
+}
+Наблюдатель:
+class JobPost
+{
+    protected $title;
+
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+}
+
+class JobSeeker implements Observer
+{
+    protected $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function onJobPosted(JobPost $job)
+    {
+        // Do something with the job posting
+        echo 'Hi ' . $this->name . '! New job posted: '. $job->getTitle();
+    }
+}
+class JobPostings implements Observable
+{
+    protected $observers = [];
+
+    protected function notify(JobPost $jobPosting)
+    {
+        foreach ($this->observers as $observer) {
+            $observer->onJobPosted($jobPosting);
+        }
+    }
+
+    public function attach(Observer $observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    public function addJob(JobPost $jobPosting)
+    {
+        $this->notify($jobPosting);
+    }
+}
+Посетитель:
+interface Animal
+{
+    public function accept(AnimalOperation $operation);
+}
+
+// Посетитель
+interface AnimalOperation
+{
+    public function visitMonkey(Monkey $monkey);
+    public function visitLion(Lion $lion);
+    public function visitDolphin(Dolphin $dolphin);
+}
+class Monkey implements Animal
+{
+    public function shout()
+    {
+        echo 'Ooh oo aa aa!';
+    }
+
+    public function accept(AnimalOperation $operation)
+    {
+        $operation->visitMonkey($this);
+    }
+}
+
+class Lion implements Animal
+{
+    public function roar()
+    {
+        echo 'Roaaar!';
+    }
+
+    public function accept(AnimalOperation $operation)
+    {
+        $operation->visitLion($this);
+    }
+}
+
+class Dolphin implements Animal
+{
+    public function speak()
+    {
+        echo 'Tuut tuttu tuutt!';
+    }
+
+    public function accept(AnimalOperation $operation)
+    {
+        $operation->visitDolphin($this);
+    }
+}
+class Speak implements AnimalOperation
+{
+    public function visitMonkey(Monkey $monkey)
+    {
+        $monkey->shout();
+    }
+
+    public function visitLion(Lion $lion)
+    {
+        $lion->roar();
+    }
+
+    public function visitDolphin(Dolphin $dolphin)
+    {
+        $dolphin->speak();
+    }
+}
+Стратегия:
+interface SortStrategy
+{
+    public function sort(array $dataset): array;
+}
+
+class BubbleSortStrategy implements SortStrategy
+{
+    public function sort(array $dataset): array
+    {
+        echo "Sorting using bubble sort";
+
+        // Do sorting
+        return $dataset;
+    }
+}
+
+class QuickSortStrategy implements SortStrategy
+{
+    public function sort(array $dataset): array
+    {
+        echo "Sorting using quick sort";
+
+        // Do sorting
+        return $dataset;
+    }
+}
+class Sorter
+{
+    protected $sorter;
+
+    public function __construct(SortStrategy $sorter)
+    {
+        $this->sorter = $sorter;
+    }
+
+    public function sort(array $dataset): array
+    {
+        return $this->sorter->sort($dataset);
+    }
+}
+Состояние:
+interface WritingState
+{
+    public function write(string $words);
+}
+
+class UpperCase implements WritingState
+{
+    public function write(string $words)
+    {
+        echo strtoupper($words);
+    }
+}
+
+class LowerCase implements WritingState
+{
+    public function write(string $words)
+    {
+        echo strtolower($words);
+    }
+}
+
+class Default implements WritingState
+{
+    public function write(string $words)
+    {
+        echo $words;
+    }
+}
+class TextEditor
+{
+    protected $state;
+
+    public function __construct(WritingState $state)
+    {
+        $this->state = $state;
+    }
+
+    public function setState(WritingState $state)
+    {
+        $this->state = $state;
+    }
+
+    public function type(string $words)
+    {
+        $this->state->write($words);
+    }
+}
+Шаблонный метод:
+abstract class Builder
+{
+
+    // Шаблонный метод
+    final public function build()
+    {
+        $this->test();
+        $this->lint();
+        $this->assemble();
+        $this->deploy();
+    }
+
+    abstract public function test();
+    abstract public function lint();
+    abstract public function assemble();
+    abstract public function deploy();
+}
+class AndroidBuilder extends Builder
+{
+    public function test()
+    {
+        echo 'Running android tests';
+    }
+
+    public function lint()
+    {
+        echo 'Linting the android code';
+    }
+
+    public function assemble()
+    {
+        echo 'Assembling the android build';
+    }
+
+    public function deploy()
+    {
+        echo 'Deploying android build to server';
+    }
+}
+
+class IosBuilder extends Builder
+{
+    public function test()
+    {
+        echo 'Running ios tests';
+    }
+
+    public function lint()
+    {
+        echo 'Linting the ios code';
+    }
+
+    public function assemble()
+    {
+        echo 'Assembling the ios build';
+    }
+
+    public function deploy()
+    {
+        echo 'Deploying ios build to server';
+    }
+}
